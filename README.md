@@ -12,3 +12,7 @@ The `src` folder contains the code to run the tasks (in `task`) and also code th
 ## data
 
 The `data` folder contains anonymized choice data from our subjects. For privacy considerations, we cannot not publicly share individual choice data. Please contact 
+
+## media
+
+The media contains movies demonstrating the tasks.
