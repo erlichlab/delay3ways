@@ -1,5 +1,5 @@
 function fig3c()
-load('~/repos/delay3ways/data/posterior_delay3way.mat');
+load('../../data/posterior_delay3way.mat');
 figure(40);clf;
 ax = draw.jaxes;
 axes(ax);
@@ -19,4 +19,4 @@ outpos = get(gca,'OuterPosition');
 set(gca,'OuterPosition',[outpos(1) outpos(2) + 0.005 outpos(3) outpos(4)])
 set(gcf,'PaperPosition',[0 0 5 4]);
 set(gcf, 'PaperSize', [5 4]);
-%saveas(gcf, '~/repos/delay3ways/data/F3ac_cout.pdf')
+saveas(gcf, '../../figs/F3ac_cout.pdf')

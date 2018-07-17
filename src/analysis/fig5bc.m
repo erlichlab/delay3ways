@@ -1,5 +1,5 @@
 function fig5bc()
-load('~/repos/delay3ways/data/delay3way.mat');
+load('../../data/delay3way.mat');
 % remove violations
 toDelete = isnan(all_trials.choice);
 all_trials(toDelete,:) = [];

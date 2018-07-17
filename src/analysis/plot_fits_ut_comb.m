@@ -50,10 +50,10 @@ if varargin{1}==3
     ax.YTick = [0 0.5 1];
     ylabel(ax, 'P(later)');
     xlabel(ax, 'U(later) - U(sooner)');
-    fsave = '~/repos/delay3ways/data/Fig50mostp_std_dU_comb_glm.pdf';
+    fsave = '../../figs/Fig50mostp_std_dU_comb_glm.pdf';
     set(gcf,'PaperPosition',[0 0 5 4]);
     set(gcf, 'PaperSize', [5 4]);
-    %saveas(gcf, fsave,'pdf')
+    saveas(gcf, fsave,'pdf')
    
    %least patient
    figure(2); clf
@@ -100,10 +100,10 @@ if varargin{1}==3
     ax.YTick = [0 0.5 1];
     ylabel(ax, 'P(later)');
     xlabel(ax, 'U(later) - U(sooner)');
-    fsave = '~/repos/delay3ways/data/Fig50leastp_dU_comb_glm.pdf';
+    fsave = '../../figs/Fig50leastp_dU_comb_glm.pdf';
     set(gcf,'PaperPosition',[0 0 5 4]);
     set(gcf, 'PaperSize', [5 4]);
-    %saveas(gcf, fsave,'pdf')
+    saveas(gcf, fsave,'pdf')
 
 else
     treatment = {'SV' 'LV'};
@@ -174,7 +174,7 @@ else
     ylabel(ax, 'P(later)');
     xlabel(ax, 'U(later) - U(sooner)');
     set(ax,'FontSize',16);
-    fsave = '~/repos/delay3ways/data/F5b.pdf';
+    fsave = '../../figs/F5b.pdf';
     outpos = get(gca,'OuterPosition');
     set(gca,'OuterPosition',[outpos(1) outpos(2) + 0.005 outpos(3) outpos(4)])
     set(gcf,'PaperPosition',[0 0 5 4]);
@@ -244,10 +244,10 @@ else
     ylabel(ax, 'P(later)');
     xlabel(ax, 'U(later) - U(sooner)');
     set(ax,'FontSize',16);
-    fsave = '~/repos/delay3ways/data/F5c.pdf';
+    fsave = '../../figs/F5c.pdf';
     outpos = get(gca,'OuterPosition');
     set(gca,'OuterPosition',[outpos(1) outpos(2) + 0.005 outpos(3) outpos(4)])
     set(gcf,'PaperPosition',[0 0 5 4]);
     set(gcf, 'PaperSize', [5 4]);
-    %saveas(gcf, fsave,'pdf')
+    saveas(gcf, fsave,'pdf')
 end

@@ -1,5 +1,5 @@
 function fig4ab()
-load('~/repos/delay3ways/data/delay3way.mat');
+load('../../data/delay3way.mat');
 % data preparation
 nc_a = table2array(full_nc);
 n_idx = find(strcmpi(full_nc.Properties.VariableNames,'NV'));
@@ -59,7 +59,7 @@ cax = colorbar;
 ylabel(cax, 'log(k_{NV})');
 set(gcf,'PaperPosition',[0 0 5 4]);
 set(gcf, 'PaperSize', [5 4]);
-%saveas(gcf, '~/repos/delay3ways/data/NC_F4ac_a.pdf')
+saveas(gcf, '../../figs/NC_F4ac_a.pdf')
 
 % Fig 4 B
 x = fs_nc;
@@ -102,4 +102,4 @@ cax = colorbar;
 ylabel(cax, 'log(k_{NV})');
 set(gcf,'PaperPosition',[0 0 5 4]);
 set(gcf, 'PaperSize', [5 4]);
-%saveas(gcf, '~/repos/delay3ways/data/NC_F4ac_b.pdf')
+saveas(gcf, '../../figs/NC_F4ac_b.pdf')

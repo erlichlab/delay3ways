@@ -1,0 +1,3 @@
+[submodule "src/analysis/elutils"]
+	path = src/analysis/elutils
+	url = https://github.com/erlichlab/elutils.git

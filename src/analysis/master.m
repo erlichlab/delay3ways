@@ -1,14 +1,9 @@
 %% master.m
 % master script that calls individual functions to generate each figure.
+% This function uses 
 
-% Required additional custom functions:
-% plot_fits_bin3.m
-% draw.jaxes.m
-% draw.errorplot.m
-% draw.unity.m
-% stats.binned.m
-% errbar.m
-% plot_fits_ut_comb.m
+
+
 
 %% Fig 2 A-F
 fig2af()

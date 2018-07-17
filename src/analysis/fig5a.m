@@ -1,5 +1,5 @@
 function fig5a()
-load('~/repos/delay3ways/data/delay3way.mat');
+load('../../data/delay3way.mat');
 % data prepare
 d_idx = find(strcmpi(full_dw.Properties.VariableNames,'DV'));
 de_idx = find(strcmpi(full_dw.Properties.VariableNames,'DVsd'));
@@ -53,4 +53,4 @@ ylim([-12,0]);
 set(gca,'FontSize',16);
 set(gcf,'PaperPosition',[0 0 5 4]);
 set(gcf, 'PaperSize', [5 4]);
-%saveas(gcf, '~/repos/delay3ways/data/DW_F5ac_a.pdf')
+saveas(gcf, '../../figs/DW_F5ac_a.pdf')

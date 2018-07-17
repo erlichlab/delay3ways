@@ -1,5 +1,5 @@
 function fig2af()
-load('~/repos/delay3ways/data/delay3way.mat');
+load('../../data/delay3way.mat');
 % remove violations
 toDelete = isnan(all_trials.choice);
 all_trials(toDelete,:) = [];
@@ -62,12 +62,12 @@ tid = 'MSL';
         D = [tout_most.rewmag tout_most.delay tout_most.smag tout_most.sdelay tout_most.blockd table2array(tout_most(:,logk_idx)) table2array(tout_most(:,noise_idx))];
         choice = tout_most.choice;
         plot_fits_bin3(choice,D,info,mcl,adcl);
-        fsave = sprintf('~/repos/delay3ways/data/F2m_%d.pdf',tx3);
+        fsave = sprintf('../../figs/F2m_%d.pdf',tx3);
         outpos = get(gca,'OuterPosition');
         set(gca,'OuterPosition',[outpos(1) outpos(2) + 0.005 outpos(3) outpos(4)])
         set(gcf,'PaperPosition',[0 0 5 4]);
         set(gcf, 'PaperSize', [5 4]);
-        %saveas(gcf, fsave,'pdf')
+        saveas(gcf, fsave,'pdf')
         figname = sprintf('Least_%s',treatment{tx3});  
         figure('Name',figname,'NumberTitle','off');clf %least
         info.b = [mean(full_least(:,3)) mean(exp(full_least(:,2)))]; 
@@ -76,10 +76,10 @@ tid = 'MSL';
         D = [tout_least.rewmag tout_least.delay tout_least.smag tout_least.sdelay tout_least.blockd  table2array(tout_least(:,logk_idx2)) table2array(tout_least(:,noise_idx2))];
         choice = tout_least.choice;
         plot_fits_bin3(choice,D,info,mcl,adcl);
-        fsave = sprintf('~/repos/delay3ways/data/F2l_%d.pdf',tx3);
+        fsave = sprintf('../../figs/F2l_%d.pdf',tx3);
         outpos = get(gca,'OuterPosition');
         set(gca,'OuterPosition',[outpos(1) outpos(2) + 0.005 outpos(3) outpos(4)])
         set(gcf,'PaperPosition',[0 0 5 4]);
         set(gcf, 'PaperSize', [5 4]);
-        %saveas(gcf, fsave,'pdf')
+        saveas(gcf, fsave,'pdf')
     end
