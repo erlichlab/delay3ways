@@ -13,17 +13,21 @@ require(lme4)
 require(ggplot2)
 require(latex2exp)
 ```
-+ Load the stan fit. This file is large.
+
+The fit `brms` model is large (>200MB), so we have not included it in the github repo. 
+You may (with enough time/CPU) regenerate the `brms` fit based on the code in `main_exp.R`.
+
+We will likely, in the future, include the full `brms` fit as part of a release.
+
+For now, load the mean parameter estimates for the discount factors for each subject-task.
 
 Load up the fits from the full model
 ```{r}
-load('../../../main_fit.RData')
+load('../../../data/main_fit_means.RData')
 ```
 
 ```{r}
 # get the means of the parameters
-outr = coef(main_fit, estimate='mean')
-out = data.frame(outr$subjid[, 1, ])
 
 # We need to do a little housekeeping to transform the
 # model parameters into the discount factors / treatment / subject
@@ -36,13 +40,11 @@ fitdt = melt(kfits, "subjid", variable.name = "treat_ind", value.name = "logk")
 # Note: treat_ind is just an index N,S,L that refers to the NV,SV, & LV tasks. 
 
 setkey(fitdt, subjid, treat_ind) # We set the key to later join with trials
-head(fitdt)
+head(fitdt, n=9)
 
-# Clear out the objects we don't need anymore to save memory
-rm(full_model, full_fit, outr, out, kfits)
 ```
 
-So, in `fitdt`, we have a data table of the  _discount factor_, ($log(k)$), for each subject-task.
+So, in `fitdt`, we have a data table of the  _discount factor_, ($log(k)$), for each subject-task (_subjid_-_treat_ind_).
 
 We will now get the trial data.
 
@@ -51,9 +53,9 @@ We will now get the trial data.
 # Get the trial data from each treatment and combine into a single DT
 # We need to do this because the trial_order info is missing from 
 # all_trials.RData (which is used for the brms fit)
-long_trials = fread('~/data/humanstuff/long.csv')
-short_trials = fread('~/data/humanstuff/short.csv')
-non_trials = fread('~/data/humanstuff/nonverbal.csv')
+long_trials = fread('../../../data/long.csv')
+short_trials = fread('../../../data/short.csv')
+non_trials = fread('../../../data/nonverbal.csv')
 trials = rbindlist(list(long_trials, short_trials, non_trials))
 trials = trials[!is.na(choice)]
 # Rename M (for MixedNonverbal) to N
@@ -74,18 +76,18 @@ trials[,early:=trial_in_sess<=4]
 
 # And exclude the non-verbal trials
 not_non = trials[treat_ind!='N']
-mod = glmer(choice ~ dU + treat_ind:dU + treat_ind*early + (1 + dU|subjid),data = not_non, family=binomial)
-not_non[,fit:=fitted(mod2)]
-summary(mod2)
+mod = glmer(choice ~ dU + treat_ind:dU + treat_ind*early + (1+dU|subjid),data = not_non, family=binomial)
+not_non[,fit:=fitted(mod)]
+summary(mod)
 ```
 
-We see that there is a significant interaction between _early_ and _task_ here.
+We see that there is a significant interaction between _early_ and _task_ (`treat_ind`) here. In particular, when `treat_ind=='S'` and `early==TRUE`, subjects are more likely to pick the lottery ($\beta_{treat\_indS:earlyTRUE}=0.858\pm 0.171$). We also see that there is a small negative main effect of `early`, which when interpreted with the interaction term, implies that subjects are less likely to pick the lottery in the early trials in the _LV_ task. We also see a small but highly reliable difference in the slope between the _short_ and _long_ tasks ($\beta_{dU:treat\_indS}=0.392\pm 0.039$). This is may be driven by the fact that the discount factors are smaller for _long_ than _short_ (e.g. see figure 3C) which makes the distribution of $\Delta U$ different for the two tasks.  
 
 ```{r}
 
-ggplot(not_non, aes(x=dU, y=choice, color=treat_ind)) + stat_summary_bin(bins=10) + 
+ggplot(data=not_non, aes(x=dU, y=choice, color=treat_ind)) + stat_summary_bin(bins=10) + 
   geom_smooth(aes(x=dU, y=fit))  +
-  xlab(TeX('$\\Delta U$')) + ylab("P(Later)") + facet_wrap(~early, labeller = labeller( early = c('FALSE' = 'All other trials', 'TRUE' = '1st 4 Trials'))) +
+  xlab(TeX('$\\Delta U$')) + ylab("P(Later)") + facet_wrap(.~early, labeller = labeller( early = c('FALSE' = 'All other trials', 'TRUE' = '1st 4 Trials'))) +
   scale_y_continuous(breaks=c(0, 0.25, 0.50, 0.75, 1)) 
 ```
 The GLMM fit doesn't perfectly capture the shape of the the data, which is an assymetric sigmoid, but it is clear that for early trials, the choices in the short verbal task are shifted relative to the long verbal task.
