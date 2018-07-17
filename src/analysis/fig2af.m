@@ -30,7 +30,7 @@ tid = 'MSL';
         fullar = table2array(full(:,[1,logk_idx,noise_idx])); %table to array
         data1_ses = data1_m(strncmpi(data1_m.treatment,tid(tx3),1),:);
         % join with logk and noise per each subject
-        id_idx = find(strcmpi(full.Properties.VariableNames,'id'))
+        id_idx = find(strcmpi(full.Properties.VariableNames,'id'));
         data1_ses = join(data1_ses,full(:,[logk_idx,noise_idx,id_idx]));
         % most patient < median
         full_most = fullar(fullar(:,2)<log_md & fullar(:,2)>log_md-log_std,:); 
