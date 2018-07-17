@@ -28,5 +28,5 @@ save.image(file='../../../data/main_fit.RData')
 
 # Perform k-fold cross validation
 kfold <- brms::kfold(fit, K=10, update_args=c(chains = 10, cores = 10))
-save.image(file='../../../datadata/main_fit.RData')
+save.image(file='../../../data/main_fit.RData')
 
