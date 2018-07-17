@@ -20,3 +20,7 @@ The `data` folder contains anonymized choice data from our subjects.
 ## media
 
 The media contains movies demonstrating the tasks.
+
+## figs
+
+An empty directory. If you run the  `src/analysis/master.m` script it will put figures in this folder.
