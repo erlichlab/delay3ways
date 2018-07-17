@@ -1,9 +1,9 @@
 %% master.m
 % master script that calls individual functions to generate each figure.
-% This function uses 
+% These functions use shared lab code that are a submodule included here:
+% https://github.com/erlichlab/elutils/git
 
-
-
+addpath elutils; % This adds the helper functions that are used for the figures.
 
 %% Fig 2 A-F
 fig2af()
