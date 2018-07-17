@@ -8,8 +8,8 @@ load('../../../data/all_trials.RData')
 
 # Describe the model
 main_model = bf(choice ~ inv_logit((rewmag / (1 + exp(logk) * delay) - smag) / noise),
-                  noise ~ 0 + treat + (1|subjid), 
-                  logk ~ 0 + treat + (treat|subjid),
+                  noise ~ treat + (1|subjid), 
+                  logk ~ treat + (treat|subjid),
                   nl = TRUE)
 
 # Fit the model to the data
@@ -23,10 +23,10 @@ main_fit = brm(main_model,
 save.image(file='../../../data/main_fit.RData')
 
 # Perform leave-one-out cross validation. 
-loo = brms::LOO(fit, nsamples = 4000, cores=10)
+loo = brms::LOO(main_fit, nsamples = 4000, cores=10)
 save.image(file='../../../data/main_fit.RData')
 
 # Perform k-fold cross validation
-kfold <- brms::kfold(fit, K=10, update_args=c(chains = 10, cores = 10))
+kfold <- brms::kfold(main_fit, K=10, update_args=c(chains = 10, cores = 10))
 save.image(file='../../../data/main_fit.RData')
 
