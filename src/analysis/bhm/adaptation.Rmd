@@ -1,0 +1,91 @@
+# Adaptation Effects
+
+This file describes the analysis for demonstrating that there is an adaptation 
+effect for early trials in a block.
+
+Ideally, we would refit the stan model and put in the trial in the block as a predictor and fit a time-constant of adaptation. However, the analysis presented here was easier and clearer for the authors. We leave the advanced stan modeling for future work.
+
++ Load the required libraries.
+
+```{r}
+library(data.table)
+require(lme4)
+require(ggplot2)
+require(latex2exp)
+```
++ Load the stan fit. This file is large.
+
+Load up the fits from the full model
+```{r}
+load('../../../main_fit.RData')
+```
+
+```{r}
+# get the means of the parameters
+outr = coef(main_fit, estimate='mean')
+out = data.frame(outr$subjid[, 1, ])
+
+# We need to do a little housekeeping to transform the
+# model parameters into the discount factors / treatment / subject
+kfits = data.table(L = out$logk_Intercept)
+kfits$S = with(out, logk_Intercept + logk_treatS)
+kfits$N = with(out, logk_Intercept + logk_treatN)
+kfits$subjid = as.numeric(rownames(out))
+fitdt = melt(kfits, "subjid", variable.name = "treat_ind", value.name = "logk")
+
+# Note: treat_ind is just an index N,S,L that refers to the NV,SV, & LV tasks. 
+
+setkey(fitdt, subjid, treat_ind) # We set the key to later join with trials
+head(fitdt)
+
+# Clear out the objects we don't need anymore to save memory
+rm(full_model, full_fit, outr, out, kfits)
+```
+
+So, in `fitdt`, we have a data table of the  _discount factor_, ($log(k)$), for each subject-task.
+
+We will now get the trial data.
+
+```{r}
+#-------
+# Get the trial data from each treatment and combine into a single DT
+# We need to do this because the trial_order info is missing from 
+# all_trials.RData (which is used for the brms fit)
+long_trials = fread('~/data/humanstuff/long.csv')
+short_trials = fread('~/data/humanstuff/short.csv')
+non_trials = fread('~/data/humanstuff/nonverbal.csv')
+trials = rbindlist(list(long_trials, short_trials, non_trials))
+trials = trials[!is.na(choice)]
+# Rename M (for MixedNonverbal) to N
+trials[treat_ind=="M", treat_ind:="N"]
+
+# This line uses data.table magic to number each trial from each session from 1:N
+trials[, trial_in_sess:=1:.N, by=.(sessid)] 
+
+# Set the keys to subjid and treatind so that we can join the trials table to the fitdt table
+setkey(trials, subjid, treat_ind)
+trials <- trials[fitdt]
+
+# Now that we have joined the tables, we can easily compute the utility of the delayed offer for each subject-task. 
+trials[, dU:={rewmag/(1+exp(logk)*delay) - smag}]
+
+# We define the early trials. <=4 is kind of arbitrary. But the effect goes away after trial #5.
+trials[,early:=trial_in_sess<=4]
+
+# And exclude the non-verbal trials
+not_non = trials[treat_ind!='N']
+mod = glmer(choice ~ dU + treat_ind:dU + treat_ind*early + (1 + dU|subjid),data = not_non, family=binomial)
+not_non[,fit:=fitted(mod2)]
+summary(mod2)
+```
+
+We see that there is a significant interaction between _early_ and _task_ here.
+
+```{r}
+
+ggplot(not_non, aes(x=dU, y=choice, color=treat_ind)) + stat_summary_bin(bins=10) + 
+  geom_smooth(aes(x=dU, y=fit))  +
+  xlab(TeX('$\\Delta U$')) + ylab("P(Later)") + facet_wrap(~early, labeller = labeller( early = c('FALSE' = 'All other trials', 'TRUE' = '1st 4 Trials'))) +
+  scale_y_continuous(breaks=c(0, 0.25, 0.50, 0.75, 1)) 
+```
+The GLMM fit doesn't perfectly capture the shape of the the data, which is an assymetric sigmoid, but it is clear that for early trials, the choices in the short verbal task are shifted relative to the long verbal task.
