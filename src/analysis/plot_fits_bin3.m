@@ -27,8 +27,11 @@ if isempty(varargin)
         hold on;
         pl5s = scatter(crew+(id-1)*0.25,cch,40,'filled','MarkerFaceColor',ccl);
         fr = @(r) exp(discountf(r,udelay(id),info.b(2),info.model)/info.b(1))./(exp(discountf(r,udelay(id),info.b(2),info.model)/info.b(1)) + exp(discountf(4,0,info.b(2),info.model)/info.b(1)));
-        [fx,fy] = fplot(fr, [-1 12]);
-        plot(fx+(id-1)*0.25,fy,'Color',(cl1(2*id-1,:)*mcl+adcl*ones(size(cl1(2*id-1,:)))),'LineWidth',2);
+        %h = fplot(fr, [-1 12]);
+        x_lim = xlim(ax);
+        fx = linspace(x_lim(1), x_lim(2),200);
+        fy = fr(fx);
+        plot(ax, fx+(id-1)*0.25,fy,'Color',(cl1(2*id-1,:)*mcl+adcl*ones(size(cl1(2*id-1,:)))),'LineWidth',2);
         if strcmp(info.title,'SV')
             ctxt = sprintf('delay = %2.1f',udelay(id));
             text(-0.5,1.4-(id-1)*0.15,ctxt,'Color',(cl1(2*id-1,:)*mcl+adcl*ones(size(cl1(2*id-1,:)))),'FontSize', 16);
