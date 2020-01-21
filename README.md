@@ -3,11 +3,11 @@ Our study on bridging the gap between animal &amp; human studies of delay-discou
 
 To cite this work:
 
-Time preferences are reliable across time-horizons and verbal vs. experiential tasks
-Evgeniya Lukinova, Yuyue Wang, Steven F. Lehrer, Jeffrey C. Erlich
-bioRxiv 351312; doi: https://doi.org/10.1101/351312
 
-[![DOI](https://zenodo.org/badge/126425035.svg)](https://zenodo.org/badge/latestdoi/126425035)
+
+Time preferences are reliable across time-horizons and verbal vs. experiential tasks
+Evgeniya Lukinova, Yuyue Wang, Steven F. Lehrer, Jeffrey C. Erlich.  
+eLife 2019;8:e39656. DOI: https://doi.org/10.7554/eLife.39656 
 
 ## src
 
